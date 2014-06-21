@@ -1,0 +1,6 @@
+#!/usr/bin/env ruby
+
+require 'whatzapper'
+
+zapper = Whatzapper::Zapper.new("/Volumes/Armand's iPhone Documents/ChatStorage.sqlite")
+zapper.zap
