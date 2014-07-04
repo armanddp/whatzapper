@@ -1,24 +1,19 @@
 # Whatzapper
 
-TODO: Write a gem description
+Quick gem to sort out the Whatsapp database for text causing crashes on iOS8 Beta 1/2. 
+Whatsapp for some reason (would be quite interesting to know why) crashes when receiving certain character strings, if|fi|ff. (http://www.reddit.com/r/iOS8/comments/28e3ub/beta_2_whatsapp_fix/)
+
+DISCLAIMER: Unless you specify a path to Chatstorage.sqlite that's not mounted on your phone you may kill your database. Which if you are trying this would probably already be unusable so much of a muchness. 
 
 ## Installation
-
-Add this line to your application's Gemfile:
-
-    gem 'whatzapper'
-
-And then execute:
-
-    $ bundle
-
-Or install it yourself as:
 
     $ gem install whatzapper
 
 ## Usage
 
-TODO: Write usage instructions here
+* Install iExplorer from http://www.macroplant.com/iexplorer/
+* Mount your WhatsApp/Documents directory
+* bundle exec whatzapper </full_path_to_/ChatStorage.sqlite> 
 
 ## Contributing
 
