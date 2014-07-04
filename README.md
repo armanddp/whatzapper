@@ -13,7 +13,7 @@ DISCLAIMER: Unless you specify a path to Chatstorage.sqlite that's not mounted o
 
 * Install iExplorer from http://www.macroplant.com/iexplorer/
 * Mount your WhatsApp/Documents directory
-* bundle exec whatzapper </full_path_to_/ChatStorage.sqlite> 
+* bundle exec whatzapper full_path_to_/ChatStorage.sqlite
 
 ## Contributing
 
