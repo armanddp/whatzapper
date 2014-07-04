@@ -3,6 +3,8 @@ require 'tmpdir'
 
 module Whatzapper
   class Zapper
+
+    WTFS = /(fi|if|ff|fl)/
     
     attr_accessor :path
 
@@ -17,25 +19,33 @@ module Whatzapper
     end
 
     protected
-    def zap(db)
-      db = open_db(db)
-      open_chats(db) do |message|
-        pk, text = message['Z_PK'], message['ZTEXT']
-        next unless text =~ /(fi|if)/
-        puts "culprit: #{text}"
-        clean_message(db, pk, text)
+    def zap(path)
+      open_db(path) do |db|
+        open_chats(db) do |message|
+          pk, text = message['Z_PK'], message['ZTEXT']
+          puts "reading #{text}"
+          next unless text =~ WTFS
+          puts "culprit: #{text}"
+          clean_message(db, pk, text)
+        end
       end
     end
 
     private
-    def open_db(db)
-      SQLite3::Database.new(db)
+    def open_db(path)
+      SQLite3::Database.new(path) do |db|
+        puts "Database.readonly? #{db.readonly?}"
+        yield db
+        puts "Total Changed: #{db.total_changes}"
+      end
     end
 
     def open_chats(db)
-      db.prepare("select * from ZWAMESSAGE").execute.each_hash do |row|
-        yield row
-      end
+      stmnt = db.prepare("select * from ZWAMESSAGE")
+        stmnt.execute.each_hash do |row|
+          yield row
+        end
+      stmnt.close
     end
 
     def work_in_writable_space
@@ -48,11 +58,11 @@ module Whatzapper
     end
 
     def clean_message(db, pk, text)
-      cleaned_text = text.sub(/(fi|if|ff)/) do |match|
+      cleaned_text = text.sub(WTFS) do |match|
         "#{match[0]}*"
       end
       puts "cleaned: #{cleaned_text}"
-      db.execute("UPDATE ZWAMESSAGE SET ZTEXT = '#{cleaned_text}' WHERE Z_PK = #{pk};")
+      puts db.execute("UPDATE ZWAMESSAGE SET ZTEXT = ? WHERE Z_PK = ?;", cleaned_text, pk)
     end
   end
 end
