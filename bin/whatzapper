@@ -2,5 +2,10 @@
 
 require 'whatzapper'
 
-zapper = Whatzapper::Zapper.new("/Volumes/iPhone Documents/ChatStorage.sqlite")
-zapper.clean_db
+database = ARGV.pop
+unless database
+  puts "Usage: whatzapper </full_path_to_/ChatStorage.sqlite>"
+else
+  zapper = Whatzapper::Zapper.new database
+  zapper.clean_db
+end
