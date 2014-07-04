@@ -2,5 +2,5 @@
 
 require 'whatzapper'
 
-zapper = Whatzapper::Zapper.new("/Volumes/Armand's iPhone Documents/ChatStorage.sqlite")
-zapper.zap
+zapper = Whatzapper::Zapper.new("/Volumes/iPhone Documents/ChatStorage.sqlite")
+zapper.clean_db
