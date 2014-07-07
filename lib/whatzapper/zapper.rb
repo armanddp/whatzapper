@@ -1,5 +1,6 @@
 require 'sqlite3'
 require 'tmpdir'
+require 'pathname'
 
 module Whatzapper
   class Zapper
