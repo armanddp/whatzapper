@@ -2,10 +2,25 @@
 
 require 'whatzapper'
 
+puts ARGV.reverse!
 database = ARGV.pop
+command = ARGV.pop
+
 unless database
-  puts "Usage: whatzapper </full_path_to_/ChatStorage.sqlite>"
+  puts "Usage: whatzapper </full_path_to_/ChatStorage.sqlite> [install_triggers|drop_triggers]"
 else
+  puts database
+  puts command
   zapper = Whatzapper::Zapper.new database
-  zapper.clean_db
+  case command
+    when 'install_triggers'
+      puts "Installing Triggers" 
+      zapper.install_triggers
+    when 'drop_triggers'
+      puts "Dropping Triggers" 
+      zapper.drop_triggers
+    else
+      puts "Cleaning Database"  
+      zapper.clean_db
+  end
 end

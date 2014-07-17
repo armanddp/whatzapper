@@ -19,6 +19,32 @@ module Whatzapper
       end
     end
 
+    def install_triggers
+      trigger_sql = %q[
+/* workaround fix */
+ 
+update ZWAMESSAGE set ZTEXT = replace( ZTEXT, 'ff', '[f f]') where ZWAMESSAGE.ZTEXT like '%ff%';
+update ZWAMESSAGE set ZTEXT = replace( ZTEXT, 'fi', '[f i]') where ZWAMESSAGE.ZTEXT like '%fi%';
+update ZWAMESSAGE set ZTEXT = replace( ZTEXT, 'fl', '[f l]') where ZWAMESSAGE.ZTEXT like '%fl%';
+ 
+DROP TRIGGER ios8_fix;
+CREATE TRIGGER ios8_fix AFTER INSERT ON ZWAMESSAGE FOR EACH ROW
+BEGIN 
+  UPDATE ZWAMESSAGE SET ZTEXT = replace(ZTEXT, 'ff', '[f f]') WHERE ROWID = NEW.ROWID;
+  UPDATE ZWAMESSAGE SET ZTEXT = replace(ZTEXT, 'fi', '[f i]') WHERE ROWID = NEW.ROWID;
+  UPDATE ZWAMESSAGE SET ZTEXT = replace(ZTEXT, 'fl', '[f l]') WHERE ROWID = NEW.ROWID;
+END;]
+      
+      work_in_writable_space do |working_db|
+        open_db(working_db) do |db|
+          db.execute(trigger_sql)
+        end
+      end
+    end
+
+    def drop_triggers
+    end
+
     protected
     def zap(path)
       open_db(path) do |db|
