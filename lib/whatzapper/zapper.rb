@@ -5,7 +5,7 @@ require 'pathname'
 module Whatzapper
   class Zapper
 
-    WTFS = /(fi|if|ff|fl)/
+    WTFS = /(fi|if|ff|fl|lf|🇩🇪|🇫🇷|🇺🇸)/i
     
     attr_accessor :path
 
